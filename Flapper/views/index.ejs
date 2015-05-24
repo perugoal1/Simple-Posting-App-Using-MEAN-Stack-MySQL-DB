@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Angular App! <%= title %></title>
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <script src="/javascripts/angular.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+    <script src="/javascripts/angapp.js"></script> 
+    <style> .glyphicon-thumbs-up { cursor:pointer } </style>
+  </head>
+  
+  <body ng-app="flapperNews" >
+  
+	  	<div class="row">
+	  		<div class="col-md-6 col-md-offset-3">
+	  			<ui-view></ui-view>
+	  		</div>
+	  	</div>
+	  		
+	  	<script type="text/ng-template" id="/home.html"> 
+	  	<div class="page-header"><h1> Flapper News</h1></div>
+	  
+	  	
+	    <div ng-repeat="post in posts | orderBy :'-upvotes'"> 
+	    	<span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvote(post)"></span>
+			<span> - upvotes : {{post.upvotes}} </span> ---- 
+	    	<a ng-show="post.link" href="{{post.link}}">{{post.title}}</a>
+	     	<span ng-hide="post.link">{{post.title}}</span> ----
+			<span><a href="#/posts/{{post.post_id}}">Comments</a></span>
+	    </div>
+	    
+	    <form ng-submit="addPost()">
+	    	<h3>Add a New Post</h3>
+	    	<div class="form-group">
+	    		<input class="form-control" type="text" placeholder="Title" ng-model="title" name="title"/>
+	    	</div>
+	    	<div class="form-group">
+			 <input class="form-control" type="text" placeholder="Link" ng-model="link" name="link"></input>
+			</div>
+	    	<button type="submit" class="btn btn-primary">Add Post</button>
+	    </form>
+    </script>
+    <script type="text/ng-template" id="/posts.html">
+ 	 <div class="page-header">
+  	  <h3>
+      <a ng-show="comments[0].link" href="{{comments[0].link}}">
+        {{comments[0].title}}
+      </a>
+      <span ng-hide="comments[0].link">
+        {{comments[0].title}}
+      </span>   
+    </h3>
+ 	 </div>
+
+ <div ng-repeat="comment in comments | orderBy:'-upvotes'" ng-show="comments[0].body">
+    <span class="glyphicon glyphicon-thumbs-up"
+      ng-click="incrementUpvotes(comment)"></span>
+    {{comment.comm_upvotes}} - by {{comment.author}}
+    <span style="font-size:20px; margin-left:10px;">
+      {{comment.body}}
+    </span>
+  	</div>
+
+	<form ng-submit="addComment()"  style="margin-top:30px;">
+    <h3>Add a new comment</h3>
+
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
+    </div>
+    <button type="submit" class="btn btn-primary">Post</button>
+  </form>
+	</script>
+  </body>
+</html>
